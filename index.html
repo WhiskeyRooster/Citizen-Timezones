@@ -244,6 +244,19 @@
     text-align:center;padding:40px 24px 0;
     color:var(--muted-2);font-size:12px;
   }
+  .footer-meta{
+    margin-top:6px;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:10px;letter-spacing:.03em;
+    color:var(--muted-2);opacity:.75;
+  }
+  .footer-contact{
+    margin-top:24px;padding-bottom:24px;
+    text-align:center;
+    font-size:11px;color:var(--muted-2);opacity:.7;
+  }
+  .footer-contact a{color:inherit;text-decoration:underline;text-decoration-color:var(--line);}
+  .footer-contact a:hover{color:var(--muted);}
  
   @media (max-width: 520px){
     .hero{padding:48px 16px 36px;}
@@ -283,7 +296,11 @@
  
   </div>
  
-  <footer>Offsets and DST status are calculated live from each zone's current UTC offset.</footer>
+  <footer>
+    Offsets and DST status are calculated live from each zone's current UTC offset.
+    <div class="footer-meta">Last checked: 2026.07.21 · Last update: 2026.07.21</div>
+  </footer>
+  <div class="footer-contact">For comments and corrections contact the site administrator at: <a href="mailto:SEEAdmin@PM.ME">SEEAdmin@PM.ME</a></div>
  
 <script>
   // Zones as listed on the Citizen world-time city table, ordered west (−) to east (+).
@@ -541,4 +558,3 @@
 </script>
 </body>
 </html>
- 
