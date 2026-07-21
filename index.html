@@ -20,6 +20,8 @@
     --lume: #c7f24a;
     --lume-dim: #7f9a3a;
     --amber: #ffab4a;
+    --laser: #35c5ff;
+    --electric: #f4ff2e;
     --radius: 10px;
   }
   *{box-sizing:border-box;}
@@ -35,7 +37,7 @@
   }
   a{color:inherit;}
   .wrap{max-width:1080px;margin:0 auto;padding:0 24px 80px;}
-
+ 
   /* ---------- HERO ---------- */
   .hero{
     padding:72px 24px 48px;
@@ -76,7 +78,7 @@
   }
   .hero-foot a{color:var(--lume-dim);text-decoration:none;border-bottom:1px dotted var(--lume-dim);}
   .hero-foot a:hover{color:var(--lume);border-color:var(--lume);}
-
+ 
   /* ---------- SECTION HEADS ---------- */
   .section-head{
     display:flex;align-items:baseline;justify-content:space-between;
@@ -88,7 +90,7 @@
   }
   .section-title b{color:var(--text);}
   .section-sub{font-size:12.5px;color:var(--muted-2);}
-
+ 
   /* ---------- GRID (bezel tokens) — now first ---------- */
   section.grid-section{padding-top:56px;}
   .grid-actions{display:flex;gap:14px;}
@@ -98,7 +100,7 @@
     border-bottom:1px solid transparent;
   }
   .link-btn:hover{color:var(--lume);border-color:var(--lume-dim);}
-
+ 
   .zone-grid{
     display:grid;
     grid-template-columns:repeat(auto-fill, minmax(112px, 1fr));
@@ -143,10 +145,10 @@
   .token input:checked ~ .code{color:var(--lume);}
   .token:has(input:checked){border-color:var(--lume-dim);background:#212b1c;}
   .token input:focus-visible ~ .dot{outline:2px solid var(--lume);outline-offset:2px;}
-
+ 
   /* ---------- BOARD (selected results) — now second ---------- */
   section.board-section{padding-top:56px;}
-
+ 
   .board{
     display:grid;
     grid-template-columns:repeat(auto-fill, minmax(200px, 1fr));
@@ -181,7 +183,7 @@
   .card-code{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:15px;letter-spacing:.04em;color:var(--text);}
   .card-offset{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted);}
   .card-city{margin-top:2px;font-size:13px;color:var(--muted);position:relative;z-index:1;}
-
+ 
   /* --- plain digital time, no animation --- */
   .card-time{
     margin-top:12px;
@@ -203,46 +205,62 @@
   }
   .card-time .unit.sec{font-size:16px;color:var(--muted);align-self:flex-end;padding-bottom:3px;}
   .card-time .colon{font-size:26px;color:var(--muted-2);padding:0 1px;}
-
+ 
   .card-bottom{
     margin-top:10px;display:flex;align-items:center;justify-content:space-between;
+    flex-wrap:wrap;gap:6px;
     position:relative;z-index:1;
   }
   .dst-pill{
     font-family:'IBM Plex Mono',monospace;
-    font-size:10.5px;letter-spacing:.08em;
+    font-size:10.5px;letter-spacing:.06em;white-space:nowrap;
     padding:3px 8px;border-radius:100px;
     border:1px solid var(--line);
     color:var(--muted-2);
   }
+  .dst-pill.perm, .dst-pill.perm-on{font-size:9.5px;letter-spacing:.03em;}
   .dst-pill.on{color:var(--amber);border-color:rgba(255,171,74,.4);background:rgba(255,171,74,.08);}
+  .dst-pill.perm{
+    color:var(--laser);
+    border-color:rgba(53,197,255,.5);
+    background:rgba(53,197,255,.1);
+    text-shadow:0 0 6px rgba(53,197,255,.6);
+    box-shadow:0 0 10px rgba(53,197,255,.25);
+  }
+  .dst-pill.perm-on{
+    color:var(--electric);
+    border-color:rgba(244,255,46,.5);
+    background:rgba(244,255,46,.1);
+    text-shadow:0 0 6px rgba(244,255,46,.6);
+    box-shadow:0 0 10px rgba(244,255,46,.25);
+  }
   .card-remove{
     background:none;border:none;color:var(--muted-2);font-family:'IBM Plex Mono',monospace;
     font-size:11px;cursor:pointer;padding:2px 4px;
   }
   .card-remove:hover{color:var(--text);}
-
+ 
   footer{
     text-align:center;padding:40px 24px 0;
     color:var(--muted-2);font-size:12px;
   }
-
+ 
   @media (max-width: 520px){
     .hero{padding:48px 16px 36px;}
   }
 </style>
 </head>
 <body>
-
+ 
   <div class="hero">
     <div class="eyebrow">Coordinated Universal Time</div>
     <div class="hero-clock" id="heroClock">--:--<span class="sec">--</span></div>
     <div class="hero-date" id="heroDate">—</div>
     <div class="hero-foot">Reference clock runs on your device's synced system time · <a href="https://time.gov" target="_blank" rel="noopener">cross-check at time.gov ↗</a></div>
   </div>
-
+ 
   <div class="wrap">
-
+ 
     <section class="grid-section">
       <div class="section-head">
         <div class="section-title">Skyhawk world-time codes</div>
@@ -252,7 +270,7 @@
       </div>
       <div class="zone-grid" id="zoneGrid"></div>
     </section>
-
+ 
     <section class="board-section">
       <div class="section-head">
         <div class="section-title">Selected — <b id="boardCount">0</b> zones</div>
@@ -262,32 +280,32 @@
         <div class="board-empty" id="boardEmpty">Select codes above to populate the board.</div>
       </div>
     </section>
-
+ 
   </div>
-
+ 
   <footer>Offsets and DST status are calculated live from each zone's current UTC offset.</footer>
-
+ 
 <script>
   // Zones as listed on the Citizen world-time city table, ordered west (−) to east (+).
   // offset = standard (non-DST) UTC offset in minutes, per the watch's published reference table.
   const ZONES = [
-    {code:"MDY", city:"Midway",              tz:"Pacific/Midway",       offset:-660},
-    {code:"HNL", city:"Honolulu",             tz:"Pacific/Honolulu",     offset:-600},
+    {code:"MDY", city:"Midway",              tz:"Pacific/Midway",       offset:-660, permDst:"off"},
+    {code:"HNL", city:"Honolulu",             tz:"Pacific/Honolulu",     offset:-600, permDst:"off"},
     {code:"ANC", city:"Anchorage",            tz:"America/Anchorage",    offset:-540},
     {code:"YVR", city:"Vancouver",            tz:"America/Vancouver",    offset:-480},
     {code:"LAX", city:"Los Angeles",          tz:"America/Los_Angeles",  offset:-480},
     {code:"DEN", city:"Denver",               tz:"America/Denver",       offset:-420},
     {code:"CHI", city:"Chicago",              tz:"America/Chicago",      offset:-360},
-    {code:"MEX", city:"Mexico City",          tz:"America/Mexico_City",  offset:-360},
+    {code:"MEX", city:"Mexico City",          tz:"America/Mexico_City",  offset:-360, permDst:"off", permYear:2022},
     {code:"NYC", city:"New York",             tz:"America/New_York",     offset:-300},
     {code:"YMQ", city:"Montreal",             tz:"America/Toronto",      offset:-300, oldCode:"YUL"},
     {code:"SCL", city:"Santiago",             tz:"America/Santiago",     offset:-240},
-    {code:"CCS", city:"Caracas",              tz:"America/Caracas",      offset:-240},
-    {code:"RIO", city:"Rio de Janeiro",       tz:"America/Sao_Paulo",    offset:-180},
-    {code:"BUE", city:"Buenos Aires",         tz:"America/Argentina/Buenos_Aires", offset:-180},
-    {code:"FEN", city:"Fernando de Noronha",  tz:"America/Noronha",      offset:-120},
+    {code:"CCS", city:"Caracas",              tz:"America/Caracas",      offset:-240, permDst:"off"},
+    {code:"RIO", city:"Rio de Janeiro",       tz:"America/Sao_Paulo",    offset:-180, permDst:"off", permYear:2019},
+    {code:"BUE", city:"Buenos Aires",         tz:"America/Argentina/Buenos_Aires", offset:-180, permDst:"off"},
+    {code:"FEN", city:"Fernando de Noronha",  tz:"America/Noronha",      offset:-120, permDst:"off"},
     {code:"PDL", city:"Ponta Delgada",        tz:"Atlantic/Azores",      offset:-60},
-    {code:"UTC", city:"Universal Time",       tz:"Etc/UTC",              offset:0},
+    {code:"UTC", city:"Universal Time",       tz:"Etc/UTC",              offset:0, permDst:"off"},
     {code:"LON", city:"London",               tz:"Europe/London",       offset:0},
     {code:"MAD", city:"Madrid",               tz:"Europe/Madrid",       offset:60},
     {code:"PAR", city:"Paris",                tz:"Europe/Paris",        offset:60},
@@ -295,35 +313,35 @@
     {code:"BER", city:"Berlin",               tz:"Europe/Berlin",       offset:60},
     {code:"CAI", city:"Cairo",                tz:"Africa/Cairo",        offset:120},
     {code:"ATH", city:"Athens",               tz:"Europe/Athens",       offset:120},
-    {code:"JNB", city:"Johannesburg",         tz:"Africa/Johannesburg", offset:120},
-    {code:"MOW", city:"Moscow",               tz:"Europe/Moscow",       offset:180},
-    {code:"RUH", city:"Riyadh",               tz:"Asia/Riyadh",         offset:180},
-    {code:"IST", city:"Istanbul",             tz:"Europe/Istanbul",     offset:180},
-    {code:"KWI", city:"Kuwait City",          tz:"Asia/Kuwait",         offset:180},
-    {code:"THR", city:"Tehran",               tz:"Asia/Tehran",         offset:210},
-    {code:"DXB", city:"Dubai",                tz:"Asia/Dubai",          offset:240},
-    {code:"KBL", city:"Kabul",                tz:"Asia/Kabul",          offset:270},
-    {code:"KHI", city:"Karachi",              tz:"Asia/Karachi",        offset:300},
-    {code:"DEL", city:"Delhi",                tz:"Asia/Kolkata",        offset:330},
-    {code:"DAC", city:"Dhaka",                tz:"Asia/Dhaka",          offset:360},
-    {code:"RGN", city:"Yangon",               tz:"Asia/Yangon",         offset:390},
-    {code:"BKK", city:"Bangkok",              tz:"Asia/Bangkok",        offset:420},
-    {code:"SIN", city:"Singapore",            tz:"Asia/Singapore",      offset:480},
-    {code:"HKG", city:"Hong Kong",            tz:"Asia/Hong_Kong",      offset:480},
-    {code:"BJS", city:"Beijing",              tz:"Asia/Shanghai",       offset:480, oldCode:"PEK"},
-    {code:"TPE", city:"Taipei",               tz:"Asia/Taipei",         offset:480},
-    {code:"SEL", city:"Seoul",                tz:"Asia/Seoul",          offset:540},
-    {code:"TYO", city:"Tokyo",                tz:"Asia/Tokyo",          offset:540},
+    {code:"JNB", city:"Johannesburg",         tz:"Africa/Johannesburg", offset:120, permDst:"off"},
+    {code:"IST", city:"Istanbul",             tz:"Europe/Istanbul",     offset:120, permDst:"on", permYear:2016},
+    {code:"RUH", city:"Riyadh",               tz:"Asia/Riyadh",         offset:180, permDst:"off"},
+    {code:"MOW", city:"Moscow",               tz:"Europe/Moscow",       offset:180, permDst:"off", permYear:2014},
+    {code:"KWI", city:"Kuwait City",          tz:"Asia/Kuwait",         offset:180, permDst:"off"},
+    {code:"THR", city:"Tehran",               tz:"Asia/Tehran",         offset:210, permDst:"off", permYear:2022},
+    {code:"DXB", city:"Dubai",                tz:"Asia/Dubai",          offset:240, permDst:"off"},
+    {code:"KBL", city:"Kabul",                tz:"Asia/Kabul",          offset:270, permDst:"off"},
+    {code:"KHI", city:"Karachi",              tz:"Asia/Karachi",        offset:300, permDst:"off"},
+    {code:"DEL", city:"Delhi",                tz:"Asia/Kolkata",        offset:330, permDst:"off"},
+    {code:"DAC", city:"Dhaka",                tz:"Asia/Dhaka",          offset:360, permDst:"off"},
+    {code:"RGN", city:"Yangon",               tz:"Asia/Yangon",         offset:390, permDst:"off"},
+    {code:"BKK", city:"Bangkok",              tz:"Asia/Bangkok",        offset:420, permDst:"off"},
+    {code:"SIN", city:"Singapore",            tz:"Asia/Singapore",      offset:480, permDst:"off"},
+    {code:"HKG", city:"Hong Kong",            tz:"Asia/Hong_Kong",      offset:480, permDst:"off"},
+    {code:"BJS", city:"Beijing",              tz:"Asia/Shanghai",       offset:480, oldCode:"PEK", permDst:"off"},
+    {code:"TPE", city:"Taipei",               tz:"Asia/Taipei",         offset:480, permDst:"off"},
+    {code:"SEL", city:"Seoul",                tz:"Asia/Seoul",          offset:540, permDst:"off"},
+    {code:"TYO", city:"Tokyo",                tz:"Asia/Tokyo",          offset:540, permDst:"off"},
     {code:"ADL", city:"Adelaide",             tz:"Australia/Adelaide",  offset:570},
     {code:"SYD", city:"Sydney",               tz:"Australia/Sydney",    offset:600},
-    {code:"NOU", city:"Noumea",               tz:"Pacific/Noumea",      offset:660},
+    {code:"NOU", city:"Noumea",               tz:"Pacific/Noumea",      offset:660, permDst:"off"},
     {code:"AKL", city:"Auckland",             tz:"Pacific/Auckland",    offset:720},
     {code:"SUV", city:"Suva",                 tz:"Pacific/Fiji",        offset:720},
   ];
-
+ 
   const STORAGE_KEY = "worldtime.selected";
   const DEFAULTS = ["UTC","NYC","LON","TYO","SYD"];
-
+ 
   function loadSelected(){
     try{
       const raw = localStorage.getItem(STORAGE_KEY);
@@ -334,13 +352,13 @@
   function saveSelected(set){
     try{ localStorage.setItem(STORAGE_KEY, JSON.stringify([...set])); }catch(e){}
   }
-
+ 
   let selected = loadSelected();
-
+ 
   function codeLabel(z){
     return z.oldCode ? `${z.oldCode} → ${z.code}` : z.code;
   }
-
+ 
   function formatOffset(mins){
     if(mins === 0) return "UTC";
     const sign = mins > 0 ? "+" : "−";
@@ -348,7 +366,7 @@
     const h = Math.floor(abs/60), m = abs%60;
     return sign + h + (m ? ":"+String(m).padStart(2,"0") : "");
   }
-
+ 
   function currentOffsetMinutes(tz, date){
     try{
       const parts = new Intl.DateTimeFormat('en-US', {timeZone: tz, timeZoneName:'shortOffset'}).formatToParts(date);
@@ -361,7 +379,7 @@
       return sign * (hours*60+mins);
     }catch(e){ return 0; }
   }
-
+ 
   function currentTimeParts(tz, date){
     try{
       const parts = new Intl.DateTimeFormat('en-GB', {timeZone: tz, hour:'2-digit', minute:'2-digit', second:'2-digit', hour12:false}).formatToParts(date);
@@ -369,7 +387,7 @@
       return {hh:get('hour'), mm:get('minute'), ss:get('second')};
     }catch(e){ return {hh:'--',mm:'--',ss:'--'}; }
   }
-
+ 
   // ---- build grid ----
   const zoneGrid = document.getElementById('zoneGrid');
   ZONES.forEach(z => {
@@ -384,29 +402,29 @@
     `;
     zoneGrid.appendChild(label);
   });
-
+ 
   zoneGrid.addEventListener('change', (e) => {
     const input = e.target.closest('input[data-code]');
     if(!input) return;
     if(input.checked) selected.add(input.dataset.code);
     else selected.delete(input.dataset.code);
     saveSelected(selected);
-    renderBoard();
+    renderBoard(null, true);
   });
-
+ 
   document.getElementById('clearBtn').addEventListener('click', () => {
     selected.clear();
     saveSelected(selected);
     zoneGrid.querySelectorAll('input[type=checkbox]').forEach(i => i.checked = false);
-    renderBoard();
+    renderBoard(null, true);
   });
-
+ 
   // ---- board: persistent cards, updated in place (no flicker, no animation) ----
   const board = document.getElementById('board');
   const boardCount = document.getElementById('boardCount');
   const boardEmpty = document.getElementById('boardEmpty');
   const cardRefs = new Map(); // code -> element refs
-
+ 
   function buildCard(z){
     const card = document.createElement('div');
     card.className = 'card';
@@ -436,17 +454,17 @@
     cardRefs.set(z.code, refs);
     return refs;
   }
-
+ 
   function setUnit(unitEl, val){
     if(unitEl.textContent === val) return;
     unitEl.textContent = val;
   }
-
-  function renderBoard(now){
+ 
+  function renderBoard(now, reorder){
     now = now || new Date();
     const list = ZONES.filter(z => selected.has(z.code));
     boardCount.textContent = list.length;
-
+ 
     // remove cards no longer selected
     [...cardRefs.keys()].forEach(code => {
       if(!selected.has(code)){
@@ -454,49 +472,66 @@
         cardRefs.delete(code);
       }
     });
-
+ 
     if(list.length === 0){
       if(!board.contains(boardEmpty)) board.appendChild(boardEmpty);
       return;
     }
     if(board.contains(boardEmpty)) boardEmpty.remove();
-
+ 
     list.forEach(z => {
       let refs = cardRefs.get(z.code);
-      if(!refs){
+      const isNew = !refs;
+      if(isNew){
         refs = buildCard(z);
+      }
+      // Only touch DOM position on a new card or an explicit reorder pass —
+      // moving nodes on every tick forces a reflow and retriggers the
+      // card's entrance animation, which is what caused the flicker.
+      if(isNew || reorder){
         board.appendChild(refs.el);
       }
       const curOffset = currentOffsetMinutes(z.tz, now);
       const dstOn = curOffset !== z.offset;
       refs.offset.textContent = formatOffset(curOffset);
-      refs.dst.textContent = dstOn ? 'DST ON' : 'DST OFF';
-      refs.dst.classList.toggle('on', dstOn);
+      if(z.permDst){
+        const yearTag = z.permYear ? ` (${z.permYear})` : '';
+        const label = (z.permDst === 'off' && !z.permYear) ? 'DST NOT OBS' : `DST PERM. ${z.permDst.toUpperCase()}${yearTag}`;
+        refs.dst.textContent = label;
+        refs.dst.classList.remove('on');
+        refs.dst.classList.toggle('perm', z.permDst === 'off');
+        refs.dst.classList.toggle('perm-on', z.permDst === 'on');
+      } else {
+        refs.dst.textContent = dstOn ? 'DST ON' : 'DST OFF';
+        refs.dst.classList.remove('perm', 'perm-on');
+        refs.dst.classList.toggle('on', dstOn);
+      }
       const t = currentTimeParts(z.tz, now);
       setUnit(refs.hh, t.hh);
       setUnit(refs.mm, t.mm);
       setUnit(refs.ss, t.ss);
     });
   }
-
+ 
   board.addEventListener('click', (e) => {
     const btn = e.target.closest('.card-remove');
     if(!btn) return;
     selected.delete(btn.dataset.code);
     saveSelected(selected);
     zoneGrid.querySelector(`input[data-code="${btn.dataset.code}"]`).checked = false;
-    renderBoard();
+    renderBoard(null, true);
   });
-
+ 
   // ---- hero clock ----
   const heroClock = document.getElementById('heroClock');
   const heroDate = document.getElementById('heroDate');
-
+ 
   function tick(){
     const now = new Date();
-    const hh = new Intl.DateTimeFormat('en-GB',{timeZone:'UTC',hour:'2-digit',hour12:false}).format(now);
-    const mm = new Intl.DateTimeFormat('en-GB',{timeZone:'UTC',minute:'2-digit'}).format(now);
-    const ss = new Intl.DateTimeFormat('en-GB',{timeZone:'UTC',second:'2-digit'}).format(now);
+    const t = currentTimeParts('UTC', now);
+    const hh = String(t.hh).padStart(2,'0');
+    const mm = String(t.mm).padStart(2,'0');
+    const ss = String(t.ss).padStart(2,'0');
     heroClock.innerHTML = `${hh}:${mm}<span class="sec">:${ss}</span>`;
     heroDate.textContent = new Intl.DateTimeFormat('en-GB',{timeZone:'UTC',weekday:'short',day:'2-digit',month:'short',year:'numeric'}).format(now).toUpperCase() + " GMT";
     renderBoard(now);
@@ -506,3 +541,4 @@
 </script>
 </body>
 </html>
+ 
