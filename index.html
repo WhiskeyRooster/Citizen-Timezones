@@ -77,8 +77,7 @@
   .hero-foot a{color:var(--lume-dim);text-decoration:none;border-bottom:1px dotted var(--lume-dim);}
   .hero-foot a:hover{color:var(--lume);border-color:var(--lume);}
 
-  /* ---------- BOARD (selected results) ---------- */
-  section.board-section{padding-top:56px;}
+  /* ---------- SECTION HEADS ---------- */
   .section-head{
     display:flex;align-items:baseline;justify-content:space-between;
     margin-bottom:18px;flex-wrap:wrap;gap:8px;
@@ -90,67 +89,7 @@
   .section-title b{color:var(--text);}
   .section-sub{font-size:12.5px;color:var(--muted-2);}
 
-  .board{
-    display:grid;
-    grid-template-columns:repeat(auto-fill, minmax(200px, 1fr));
-    gap:12px;
-    min-height:96px;
-  }
-  .board-empty{
-    grid-column:1/-1;
-    border:1px dashed var(--line);
-    border-radius:var(--radius);
-    padding:28px 16px;
-    text-align:center;
-    color:var(--muted-2);
-    font-size:13.5px;
-  }
-  .card{
-    background:var(--panel);
-    border:1px solid var(--line);
-    border-radius:var(--radius);
-    padding:16px 16px 14px;
-    position:relative;
-    overflow:hidden;
-    animation:rise .25s ease both;
-  }
-  .card::before{
-    content:"";
-    position:absolute;top:50%;left:0;right:0;height:1px;
-    background:var(--line-soft);
-  }
-  @keyframes rise{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:none;}}
-  .card-top{display:flex;align-items:baseline;justify-content:space-between;position:relative;z-index:1;}
-  .card-code{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:15px;letter-spacing:.04em;color:var(--text);}
-  .card-offset{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted);}
-  .card-city{margin-top:2px;font-size:13px;color:var(--muted);position:relative;z-index:1;}
-  .card-time{
-    margin-top:12px;
-    font-family:'IBM Plex Mono',monospace;
-    font-weight:600;
-    font-size:30px;
-    letter-spacing:.03em;
-    position:relative;z-index:1;
-  }
-  .card-bottom{
-    margin-top:10px;display:flex;align-items:center;justify-content:space-between;
-    position:relative;z-index:1;
-  }
-  .dst-pill{
-    font-family:'IBM Plex Mono',monospace;
-    font-size:10.5px;letter-spacing:.08em;
-    padding:3px 8px;border-radius:100px;
-    border:1px solid var(--line);
-    color:var(--muted-2);
-  }
-  .dst-pill.on{color:var(--amber);border-color:rgba(255,171,74,.4);background:rgba(255,171,74,.08);}
-  .card-remove{
-    background:none;border:none;color:var(--muted-2);font-family:'IBM Plex Mono',monospace;
-    font-size:11px;cursor:pointer;padding:2px 4px;
-  }
-  .card-remove:hover{color:var(--text);}
-
-  /* ---------- GRID (bezel tokens) ---------- */
+  /* ---------- GRID (bezel tokens) — now first ---------- */
   section.grid-section{padding-top:56px;}
   .grid-actions{display:flex;gap:14px;}
   .link-btn{
@@ -205,6 +144,84 @@
   .token:has(input:checked){border-color:var(--lume-dim);background:#212b1c;}
   .token input:focus-visible ~ .dot{outline:2px solid var(--lume);outline-offset:2px;}
 
+  /* ---------- BOARD (selected results) — now second ---------- */
+  section.board-section{padding-top:56px;}
+
+  .board{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(200px, 1fr));
+    gap:12px;
+    min-height:96px;
+  }
+  .board-empty{
+    grid-column:1/-1;
+    border:1px dashed var(--line);
+    border-radius:var(--radius);
+    padding:28px 16px;
+    text-align:center;
+    color:var(--muted-2);
+    font-size:13.5px;
+  }
+  .card{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:16px 16px 14px;
+    position:relative;
+    overflow:hidden;
+    animation:rise .25s ease both;
+  }
+  .card::before{
+    content:"";
+    position:absolute;top:50%;left:0;right:0;height:1px;
+    background:var(--line-soft);
+  }
+  @keyframes rise{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:none;}}
+  .card-top{display:flex;align-items:baseline;justify-content:space-between;position:relative;z-index:1;}
+  .card-code{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:15px;letter-spacing:.04em;color:var(--text);}
+  .card-offset{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted);}
+  .card-city{margin-top:2px;font-size:13px;color:var(--muted);position:relative;z-index:1;}
+
+  /* --- plain digital time, no animation --- */
+  .card-time{
+    margin-top:12px;
+    display:flex;align-items:baseline;gap:2px;
+    position:relative;z-index:1;
+    font-family:'IBM Plex Mono',monospace;
+    font-weight:600;
+  }
+  .card-time .unit{
+    display:inline-block;
+    min-width:1.05em;
+    text-align:center;
+    background:#141a22;
+    border-radius:3px;
+    font-size:26px;
+    padding:1px 3px;
+    color:var(--text);
+    box-shadow:inset 0 0 0 1px var(--line-soft);
+  }
+  .card-time .unit.sec{font-size:16px;color:var(--muted);align-self:flex-end;padding-bottom:3px;}
+  .card-time .colon{font-size:26px;color:var(--muted-2);padding:0 1px;}
+
+  .card-bottom{
+    margin-top:10px;display:flex;align-items:center;justify-content:space-between;
+    position:relative;z-index:1;
+  }
+  .dst-pill{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:10.5px;letter-spacing:.08em;
+    padding:3px 8px;border-radius:100px;
+    border:1px solid var(--line);
+    color:var(--muted-2);
+  }
+  .dst-pill.on{color:var(--amber);border-color:rgba(255,171,74,.4);background:rgba(255,171,74,.08);}
+  .card-remove{
+    background:none;border:none;color:var(--muted-2);font-family:'IBM Plex Mono',monospace;
+    font-size:11px;cursor:pointer;padding:2px 4px;
+  }
+  .card-remove:hover{color:var(--text);}
+
   footer{
     text-align:center;padding:40px 24px 0;
     color:var(--muted-2);font-size:12px;
@@ -226,16 +243,6 @@
 
   <div class="wrap">
 
-    <section class="board-section">
-      <div class="section-head">
-        <div class="section-title">Selected — <b id="boardCount">0</b> zones</div>
-        <div class="section-sub">City · local time (24h) · offset from GMT · DST</div>
-      </div>
-      <div class="board" id="board">
-        <div class="board-empty" id="boardEmpty">Select codes below to populate the board.</div>
-      </div>
-    </section>
-
     <section class="grid-section">
       <div class="section-head">
         <div class="section-title">Skyhawk world-time codes</div>
@@ -244,6 +251,16 @@
         </div>
       </div>
       <div class="zone-grid" id="zoneGrid"></div>
+    </section>
+
+    <section class="board-section">
+      <div class="section-head">
+        <div class="section-title">Selected — <b id="boardCount">0</b> zones</div>
+        <div class="section-sub">City · local time (24h:mm:ss) · offset from GMT · DST</div>
+      </div>
+      <div class="board" id="board">
+        <div class="board-empty" id="boardEmpty">Select codes above to populate the board.</div>
+      </div>
     </section>
 
   </div>
@@ -345,10 +362,12 @@
     }catch(e){ return 0; }
   }
 
-  function currentTimeString(tz, date){
+  function currentTimeParts(tz, date){
     try{
-      return new Intl.DateTimeFormat('en-GB', {timeZone: tz, hour:'2-digit', minute:'2-digit', hour12:false}).format(date);
-    }catch(e){ return "--:--"; }
+      const parts = new Intl.DateTimeFormat('en-GB', {timeZone: tz, hour:'2-digit', minute:'2-digit', second:'2-digit', hour12:false}).formatToParts(date);
+      const get = t => parts.find(p => p.type === t)?.value ?? '--';
+      return {hh:get('hour'), mm:get('minute'), ss:get('second')};
+    }catch(e){ return {hh:'--',mm:'--',ss:'--'}; }
   }
 
   // ---- build grid ----
@@ -382,40 +401,81 @@
     renderBoard();
   });
 
-  // ---- board ----
+  // ---- board: persistent cards, updated in place (no flicker, no animation) ----
   const board = document.getElementById('board');
   const boardCount = document.getElementById('boardCount');
+  const boardEmpty = document.getElementById('boardEmpty');
+  const cardRefs = new Map(); // code -> element refs
 
-  function renderBoard(){
-    const now = new Date();
+  function buildCard(z){
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.dataset.code = z.code;
+    card.innerHTML = `
+      <div class="card-top">
+        <span class="card-code">${codeLabel(z)}</span>
+        <span class="card-offset" data-f="offset">—</span>
+      </div>
+      <div class="card-city">${z.city}</div>
+      <div class="card-time">
+        <span class="unit" data-f="hh">--</span><span class="colon">:</span><span class="unit" data-f="mm">--</span><span class="colon">:</span><span class="unit sec" data-f="ss">--</span>
+      </div>
+      <div class="card-bottom">
+        <span class="dst-pill" data-f="dst">DST</span>
+        <button class="card-remove" data-code="${z.code}">REMOVE</button>
+      </div>
+    `;
+    const refs = {
+      el: card,
+      offset: card.querySelector('[data-f="offset"]'),
+      dst: card.querySelector('[data-f="dst"]'),
+      hh: card.querySelector('[data-f="hh"]'),
+      mm: card.querySelector('[data-f="mm"]'),
+      ss: card.querySelector('[data-f="ss"]'),
+    };
+    cardRefs.set(z.code, refs);
+    return refs;
+  }
+
+  function setUnit(unitEl, val){
+    if(unitEl.textContent === val) return;
+    unitEl.textContent = val;
+  }
+
+  function renderBoard(now){
+    now = now || new Date();
     const list = ZONES.filter(z => selected.has(z.code));
     boardCount.textContent = list.length;
-    board.innerHTML = "";
+
+    // remove cards no longer selected
+    [...cardRefs.keys()].forEach(code => {
+      if(!selected.has(code)){
+        cardRefs.get(code).el.remove();
+        cardRefs.delete(code);
+      }
+    });
+
     if(list.length === 0){
-      const empty = document.createElement('div');
-      empty.className = 'board-empty';
-      empty.textContent = 'Select codes below to populate the board.';
-      board.appendChild(empty);
+      if(!board.contains(boardEmpty)) board.appendChild(boardEmpty);
       return;
     }
+    if(board.contains(boardEmpty)) boardEmpty.remove();
+
     list.forEach(z => {
+      let refs = cardRefs.get(z.code);
+      if(!refs){
+        refs = buildCard(z);
+        board.appendChild(refs.el);
+      }
       const curOffset = currentOffsetMinutes(z.tz, now);
       const dstOn = curOffset !== z.offset;
-      const card = document.createElement('div');
-      card.className = 'card';
-      card.innerHTML = `
-        <div class="card-top">
-          <span class="card-code">${codeLabel(z)}</span>
-          <span class="card-offset">${formatOffset(curOffset)}</span>
-        </div>
-        <div class="card-city">${z.city}</div>
-        <div class="card-time">${currentTimeString(z.tz, now)}</div>
-        <div class="card-bottom">
-          <span class="dst-pill ${dstOn ? 'on' : ''}">${dstOn ? 'DST ON' : 'DST OFF'}</span>
-          <button class="card-remove" data-code="${z.code}">REMOVE</button>
-        </div>
-      `;
-      board.appendChild(card);
+      refs.offset.textContent = formatOffset(curOffset);
+      refs.dst.textContent = dstOn ? 'DST ON' : 'DST OFF';
+      refs.dst.classList.toggle('on', dstOn);
+      const t = currentTimeParts(z.tz, now);
+      setUnit(refs.hh, t.hh);
+      setUnit(refs.mm, t.mm);
+      setUnit(refs.ss, t.ss);
     });
   }
 
@@ -439,7 +499,7 @@
     const ss = new Intl.DateTimeFormat('en-GB',{timeZone:'UTC',second:'2-digit'}).format(now);
     heroClock.innerHTML = `${hh}:${mm}<span class="sec">:${ss}</span>`;
     heroDate.textContent = new Intl.DateTimeFormat('en-GB',{timeZone:'UTC',weekday:'short',day:'2-digit',month:'short',year:'numeric'}).format(now).toUpperCase() + " GMT";
-    renderBoard();
+    renderBoard(now);
   }
   tick();
   setInterval(tick, 1000);
